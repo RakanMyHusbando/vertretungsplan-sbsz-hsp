@@ -4,6 +4,8 @@ const fs = require("node:fs")
 let page
 
 const init = async () => {
+    if(!process.env.HOME || !process.env.SBSZ_HSP_CLASS || !process.env.SCREENSHOT_PATH)
+        throw new Error("Missing required env variable. Required are HOME, SBSZ_HSP_CLASS and SCREENSHOT_PATH.")
     const browser = await puppeteer.launch()
     page = await browser.newPage()
     
@@ -30,9 +32,6 @@ const refresh = async () =>
 const screenshot = async () => {
     const screenshotPath = process.env.SCREENSHOT_PATH
     
-    if (!process.env.HOME)
-        throw new Error("HOME env variable not set")
-
     const fileElement = await page.waitForSelector("div#davinci-scheduler")
 
     if (fs.existsSync(screenshotPath))
